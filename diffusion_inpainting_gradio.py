@@ -50,9 +50,10 @@ def predict(crop_data: dict, mask_data: dict, prompt, ip_adapter_scale: float,
     print(f"[Diffusion Inpainting] ip_adapter_scale: {ip_adapter_scale} guidance_scale: {guidance_scale} strength: {strength} prompt: {prompt}")
 
     pipe.set_ip_adapter_scale(ip_adapter_scale)
-
+    generator = torch.Generator(device="cpu").manual_seed(4)
     output = pipe(prompt=prompt, image=init_image, mask_image=mask_image, ip_adapter_image=ip_image,
         guidance_scale=guidance_scale, num_inference_steps=int(steps), strength=strength,
+        generator=generator,
         )
 
     output_image = output.images[0]
